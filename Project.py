@@ -28,12 +28,14 @@ class User():
         self.artist_list_string = data[data.find(':')+1:]
         self.artist_list = artistListGenerator(self.artist_list_string, self.private)
     
-    def addArtist(self, artist):
+    def addArtist(self, new_preferences):
         '''method to add an artist to a users artist_list, updates the artist dictionary accordingly - James'''
-        self.artist_list.append(artist)
+        if not self.private:
+            list(map(removeArtistDictionary,self.artist_list))
+        self.artist_list = new_preferences
         self.artist_list.sort()
         if not self.private:
-            artistDictionary(artist)
+            list(map(addArtistDictionary, self.artist_list))
     
     def totalLikes(self):
         '''returns the total number of artists a user likes -James'''
@@ -41,27 +43,33 @@ class User():
 
     def __str__(self):
         '''returns User class object as a string - James'''
-        return self.name + ':' + reduce(lambda x,y : x + ','+ y, self.artist_list)
+        if self.artist_list != []: 
+            return self.name + ':' + reduce(lambda x,y : x + ','+ y, self.artist_list)
+        return self.name + ':'
 
 
-def artistDictionary(artist):
-    '''Updates the artist dictionary with -James'''
+def addArtistDictionary(artist):
+    '''Updates the artist dictionary, adds one to the artist key -James'''
     if artist in artists:
         artists[artist] = artists[artist] + 1
     else:
         artists[artist] = 1
+
+def removeArtistDictionary(artist):
+    '''Updates the artist dictionary, removes one from the artist key -James'''
+    if artist in artists:
+        artists[artist] = artists[artist] - 1
 
 def artistListGenerator(artist_list_string, private):
     '''Takes a string of artists and returns it as a list of artists, updates the artist dictionary -James'''
     if artist_list_string == '':
         return []
     if artist_list_string.endswith('\n'):
-        print("strip")
         artist_list_string = artist_list_string[:-1]
 
     artist_list = artist_list_string.split(',')
     if not private:
-        list(map(artistDictionary,artist_list))
+        list(map(addArtistDictionary,artist_list))
     return artist_list
 
 
@@ -100,14 +108,16 @@ def getUser():
 
 def enterPreferences(currentUser):
     '''Takes user input to add new user preferences -James'''
+    new_preference_list = []
     while True:
         new_preference = input("Enter an artist that you like (Enter to finish):")
         if new_preference == '':
-            return
+            currentUser.addArtist(new_preference_list)
+            return 
         new_preference = new_preference.lower()
         new_preference = new_preference.title()
-        if new_preference not in currentUser.artist_list:
-            currentUser.addArtist(new_preference)
+        if new_preference not in new_preference_list:
+            new_preference_list.append(new_preference)
 
 def menu():
     '''menu for the reccomender, takes user input to select which function to activate -James'''
@@ -145,8 +155,5 @@ q- Save and quit\n'''
 '''Program starts here'''
 
 loadFile()
-print(list(map(str,users)))
 activeUser = getUser()
 menu()
-
-'''This is a new branch'''
