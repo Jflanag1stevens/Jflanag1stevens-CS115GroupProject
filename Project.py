@@ -77,12 +77,14 @@ def loadFile():
     '''Loads the database file and updates memory with the data - James'''
     try:
         file =  open("musicrecplus.txt", "r")
+        for line in file:
+            users.append(User(line))
+        file.close()
     except FileNotFoundError:
         file = open("musicrecplus.txt", "x")
         print("File not found creating new file")
-    for line in file:
-        users.append(User(line))
-    file.close()
+        file.close()
+
 
 def saveFile():
     '''Turns all users into the correct string format and then writes to the database file - James'''
