@@ -138,6 +138,7 @@ def getRecommendations(currentUser):
                 similarities += 1
         if similarities > maxSims:
             recommend = user
+            maxSims = similarities
     for artist in recommend.artist_list:
         if not artist in favs:
             print(artist)
