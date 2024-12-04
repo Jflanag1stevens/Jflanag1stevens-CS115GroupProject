@@ -70,6 +70,8 @@ def artistListGenerator(artist_list_string, private):
     artist_list = artist_list_string.split(',')
     if not private:
         list(map(addArtistDictionary,artist_list))
+    artist_list = list(map(lambda x: x.title(), artist_list))
+    artist_list.sort()
     return artist_list
 
 
