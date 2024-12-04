@@ -1,7 +1,7 @@
 """
 Music Recommender Project
 
-Members: James Flanagan,
+Members: James Flanagan, Nikhil Patel
 
 Pledge: I pledge my honor that I have abided by the Stevens Honor System.
 """
@@ -121,6 +121,27 @@ def enterPreferences(currentUser):
         if new_preference not in new_preference_list:
             new_preference_list.append(new_preference)
 
+def getRecommendations(currentUser):
+    "Returns artist recommendations from the user with the most similarity to the current user - Nikhil"
+    publicUsers = list(filter(lambda x: not x.private, users))
+    publicUsers = list(filter(lambda x: x.artist_list != currentUser.artist_list, publicUsers))
+    if publicUsers == []:
+        print("No recommendations available at this time.")
+        return
+    favs = currentUser.artist_list
+    recommend = publicUsers[0]
+    maxSims = 0
+    for user in publicUsers:
+        similarities = 0
+        for artist in user.artist_list:
+            if artist in favs:
+                similarities += 1
+        if similarities > maxSims:
+            recommend = user
+    for artist in recommend.artist_list:
+        if not artist in favs:
+            print(artist)
+
 def menu():
     '''menu for the reccomender, takes user input to select which function to activate -James'''
     while True:
@@ -137,8 +158,7 @@ q- Save and quit\n'''
         if action == 'e':
             enterPreferences(activeUser)
         if action == 'r':
-            #getRecommendations() to be implemented
-            pass
+            getRecommendations(activeUser)
         if action == 'p':
             #getMostPopular() to be implemented
             pass
