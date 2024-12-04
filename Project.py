@@ -125,20 +125,27 @@ def getRecommendations(currentUser):
     "Returns artist recommendations from the user with the most similarity to the current user - Nikhil"
     publicUsers = list(filter(lambda x: not x.private, users))
     publicUsers = list(filter(lambda x: x.artist_list != currentUser.artist_list, publicUsers))
-    if publicUsers == []:
+    candidates = []
+    favs = currentUser.artist_list
+    for user in publicUsers:
+        similarities = 0
+        for artist in user.artist_list:
+            if artist in favs:
+                similarities += 1
+        if similarities != len(user.artist_list):
+            candidates.append(user)
+    if candidates == []:
         print("No recommendations available at this time.")
         return
-    favs = currentUser.artist_list
-    recommend = publicUsers[0]
+    recommend = candidates[0]
     maxSims = 0
-    for user in publicUsers:
+    for user in candidates:
         similarities = 0
         for artist in user.artist_list:
             if artist in favs:
                 similarities += 1
         if similarities > maxSims:
             recommend = user
-            maxSims = similarities
     for artist in recommend.artist_list:
         if not artist in favs:
             print(artist)
