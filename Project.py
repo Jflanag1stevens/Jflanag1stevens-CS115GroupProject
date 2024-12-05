@@ -153,7 +153,7 @@ def getRecommendations(currentUser):
         if not artist in favs:
             print(artist)
 
-def howPopular():
+def getMostPopular():
     "Prints the top 3 artists based on likes - Nikhil"
     newArts = dict(filter(lambda x: x[1] != 0, artists.items()))
     if len(newArts) == 0:
@@ -188,10 +188,10 @@ q- Save and quit\n'''
         if action == 'r':
             getRecommendations(activeUser)
         if action == 'p':
-            #getMostPopular() to be implemented
-            pass
+            getMostPopular()
         if action == 'h':
-            howPopular()
+            #howPopular() to be implemented
+            pass
         if action == 'm':
             #getMostLikes() to be implemented
             pass
