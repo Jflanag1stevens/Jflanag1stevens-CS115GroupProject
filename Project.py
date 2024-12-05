@@ -1,7 +1,7 @@
 """
 Music Recommender Project
 
-Members: James Flanagan, Nikhil Patel
+Members: James Flanagan, Nikhil Patel, Sebastian Feliciano
 
 Pledge: I pledge my honor that I have abided by the Stevens Honor System.
 """
@@ -169,7 +169,42 @@ def getMostPopular():
                 best = artist
         print(best)
         del newArts[best]
+        
+def howPopular():
+    'Print the number of likes the most popular artist recieved - Sebastian'
+    p = {}
+    for user in users:
+        if not user.private:
+            for artist in user.artist_list:
+                if artist in p:
+                    p[artist] += 1
+                else:
+                    p[artist] = 1
+    if not p:
+        print('Sorry, no artists found.')
+        return 
+    m = reduce(lambda x, y: x if x > y else y, p.values())
+    print(m)
 
+def getMostLikes():
+    'Prints the full name(s) of the user(s) who like(s) the most artists - Sebastian'
+    p = [user for user in users]
+    if not p:
+        print('Sorry, no user found.')
+    l = reduce(lambda x, y: x if x > y else y, [user.totalLikes() for user in p])
+    m = [user.name for user in p if user.totalLikes() == l]
+    for i in sorted(m):
+        print(i)
+
+def showPreferences(activeUser):
+    'Prints list of users preferences - Sebastian'
+    if not activeUser.artist_list:
+        print('You have not yet entered preferences.')
+    else:
+        print('Your preferences:')
+        for artist in activeUser.artist_list:
+            print(artist)
+            
 def menu():
     '''menu for the reccomender, takes user input to select which function to activate -James'''
     while True:
@@ -180,6 +215,7 @@ r- Get recommendations
 p- Show most popular artists
 h- How popular is the most popular
 m- Which user has the most likes
+s- Get your preferences
 q- Save and quit\n'''
 )
         
@@ -190,11 +226,11 @@ q- Save and quit\n'''
         if action == 'p':
             getMostPopular()
         if action == 'h':
-            #howPopular() to be implemented
-            pass
+            howPopular()
         if action == 'm':
-            #getMostLikes() to be implemented
-            pass
+            getMostLikes()
+        if action == 's':
+            showPreferences(activeUser)
         if action == 'q':
             saveFile() 
             return
