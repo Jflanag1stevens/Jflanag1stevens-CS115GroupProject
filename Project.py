@@ -153,6 +153,23 @@ def getRecommendations(currentUser):
         if not artist in favs:
             print(artist)
 
+def howPopular():
+    "Prints the top 3 artists based on likes - Nikhil"
+    newArts = dict(filter(lambda x: x[1] != 0, artists.items()))
+    if len(newArts) == 0:
+        print("No recommendations available at this time.")
+        return
+    for i in range(3):
+        if len(newArts) == 0:
+            return
+        listOfArtists = list(newArts)
+        best = listOfArtists[0]
+        for artist in newArts:
+            if newArts[artist] > newArts[best]:
+                best = artist
+        print(best)
+        del newArts[best]
+
 def menu():
     '''menu for the reccomender, takes user input to select which function to activate -James'''
     while True:
@@ -174,8 +191,7 @@ q- Save and quit\n'''
             #getMostPopular() to be implemented
             pass
         if action == 'h':
-            #howPopular() to be implemented
-            pass
+            howPopular()
         if action == 'm':
             #getMostLikes() to be implemented
             pass
